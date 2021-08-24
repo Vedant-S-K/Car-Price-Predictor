@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Title Page-->
+    <title>CAR PRICE PREDICTOR</title>
+
+    <!-- Icons font CSS-->
+    <link href="./static/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+    <link href="./static/vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <!-- Font special for pages-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Vendor CSS-->
+    <link href="./static/vendor/select2/select2.min.css" rel="stylesheet" media="all">
+    <link href="./static/vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
+
+    <!-- Main CSS-->
+    <link href="./static/css/main.css" rel="stylesheet" media="all">
+</head>
+
+<body>
+    <div class="page-wrapper bg-gra-01 p-t-180 p-b-100 font-poppins bgimage">
+        <div class="wrapper wrapper--w780">
+            <div class="card card-3">
+                <div class="card-heading"></div>
+                <div class="card-body">
+                    <h2 class="title">CAR PRICE PREDICTOR</h2>
+                    <form method="POST" action="/predict">
+                        
+                        <!--Company-Open-->
+                        <div class="input-group">
+                            <div class="rs-select2 js-select-simple select--no-search">
+                                <select name="company" >
+                                    <option disabled="disabled" selected="selected">Select the Company</option>
+                                    {% for company in companies %}
+                                    <option value="{{ company }}">{{ company }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="select-dropdown"></div>
+                            </div>
+                        </div>
+                        <!--Company-Close-->
+
+                        <!--Model-Open-->
+                        <div class="input-group">
+                            <div class="rs-select2 js-select-simple select--no-search">
+                                <select name="car_model">
+                                    <option disabled="disabled" selected="selected">Select the Model</option>
+                                    {% for models in car_models %}
+                                    <option value="{{ models }}">{{ models }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="select-dropdown"></div>
+                            </div>
+                        </div>
+                        <!--Model-Close-->
+
+                        <!--Year-Open-->
+                        <div class="input-group">
+                            <div class="rs-select2 js-select-simple select--no-search">
+                                <select name="year">
+                                    <option disabled="disabled" selected="selected">Select the Year of Purchase</option>
+                                    {% for year in years %}
+                                    <option value="{{ year }}">{{ year }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="select-dropdown"></div>
+                            </div>
+                        </div>
+                        <!--Year-Close-->
+
+                        <!--Fuel-Open-->
+                        <div class="input-group">
+                            <div class="rs-select2 js-select-simple select--no-search">
+                                <select name="fuel_type">
+                                    <option disabled="disabled" selected="selected">Select the Fuel Type</option>
+                                    <option value="Petrol">Petrol</option>
+                                    <option value="Diesel">Diesel</option>
+                                    <option value="LPG">LPG</option>
+                                </select>
+                                <div class="select-dropdown"></div>
+                            </div>
+                        </div>
+                        <!--Fuel-Close-->
+
+                        <!--Kilometers Driven-Open-->
+                        <div class="input-group">
+                            <input class="input--style-3" type="text" placeholder="Enter the no.of Kilometers car has travelled" name="kilo_driven">
+                        </div>
+                        <!--Kilometers Driven-Close-->
+                        <div class="p-t-10">
+                            <button class="btn btn--pill btn--green" type="submit" onclick="send_data()">Submit</button>
+                            <br><br>
+                            <label id="prediction" class="label"></label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+    function form_handler(event) {
+        event.preventDefault(); // Don't submit the form normally
+    }
+    function send_data()
+    {
+        document.querySelector('form').addEventListener("submit",form_handler);
+
+        var fd=new FormData(document.querySelector('form'));
+        var xhr= new XMLHttpRequest({mozSystem: true});
+
+        xhr.open('POST','/predict',true);
+        document.getElementById('prediction').innerHTML="Wait ! Predicting Price.....";
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState == XMLHttpRequest.DONE){
+                document.getElementById('prediction').innerHTML="Prediction : ₹"+xhr.responseText;
+
+            }
+        };
+        xhr.onload= function(){};
+        xhr.send(fd);
+    }
+
+    </script>
+    <!-- Jquery JS-->
+    <script src="./static/vendor/jquery/jquery.min.js"></script>
+    <!-- Vendor JS-->
+    <script src="./static/vendor/select2/select2.min.js"></script>
+    <script src="./static/vendor/datepicker/moment.min.js"></script>
+    <script src="./static/vendor/datepicker/daterangepicker.js"></script>
+    <!-- Main JS-->
+    <script src="./static/js/global.js"></script>
+</body>
+</html>
